@@ -40,6 +40,7 @@ const GamesList = () => {
         gamesList = gamesList.filter(Boolean);
         setGames(gamesList);
         window.api.send('writeGames', gamesList);
+        window.api.send('updateDealersGames', gamesList);
     }
 
     return (

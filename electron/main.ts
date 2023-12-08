@@ -128,3 +128,37 @@ ipcMain.on('readGames', (event) => {
     }
   });
 });
+
+ipcMain.on('updateDealersGames', (_event, gamesList) => {
+  const filePath = path.join(app.getPath('userData'), 'dealers.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } else {
+      let dealers: { [key: string]: { games: { [key: string]: any } } } = {};
+      try {
+        dealers = JSON.parse(data);
+        for (let dealerKey in dealers) {
+          let dealer = dealers[dealerKey];
+          for (let game of gamesList) {
+            if (!(game in dealer.games)) {
+              dealer.games[game] = false;
+            }
+          }
+          for (let game in dealer.games) {
+            if (!gamesList.includes(game)) {
+              delete dealer.games[game];
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error parsing JSON', e);
+      }
+      fs.writeFile(filePath, JSON.stringify(dealers), (err) => {
+        if (err) {
+          console.error('Error writing file', err);
+        }
+      });
+    }
+  });
+});
