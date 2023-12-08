@@ -37,12 +37,18 @@ const AddDealer = () => {
         const handleGamesList = (gamesList: string[]) => {
             setGames(gamesList);
         };
+
+        const handleGamesSaved = (gamesList: string[]) => {
+            setGames(gamesList);
+        };
     
         window.api.request('readGames');
         window.api.on('gamesList', handleGamesList);
+        window.api.on('gamesSaved', handleGamesSaved);
     
         return () => {
             window.api.remove('gamesList', handleGamesList);
+            window.api.remove('gamesSaved', handleGamesSaved);
         };
     }, []);
 

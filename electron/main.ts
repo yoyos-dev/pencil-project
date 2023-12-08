@@ -112,6 +112,8 @@ ipcMain.on('writeGames', (_event, gamesList) => {
   fs.writeFile(filePath, JSON.stringify(gamesList), (err) => {
       if (err) {
           console.error('Error writing file', err);
+      } else {
+        _event.reply('gamesSaved', gamesList);
       }
   });
 });
