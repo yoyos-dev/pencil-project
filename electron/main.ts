@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'node:path'
+import fs from 'fs';
 
 // The built directory structure
 //
@@ -37,6 +38,11 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, 'index.html'))
   }
+
+  const dealersFilePath = path.join(app.getPath('userData'), 'dealers.json');
+  if (!fs.existsSync(dealersFilePath)) {
+    fs.writeFileSync(dealersFilePath, JSON.stringify({}));
+  }
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -58,3 +64,38 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(createWindow)
+
+declare global {
+  interface Window {
+      api: {
+          send: (event: string, data: any) => void;
+      };
+  }
+}
+
+ipcMain.on('writeDealer', (_event, dealerData) => {
+  const filePath = path.join(app.getPath('userData'), 'dealers.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } else {
+      let json: { [key: string]: any } = {};
+      if (data) {
+        try {
+          json = JSON.parse(data);
+        } catch (e) {
+          console.error('Error parsing JSON', e);
+        }
+      }
+      
+      let dealerKey = dealerData.lastName + ", " + dealerData.firstName;
+      json[dealerKey] = dealerData;
+
+      fs.writeFile(filePath, JSON.stringify(json), (err) => {
+        if (err) {
+            console.error('Error writing file', err);
+        }
+      });
+    }
+  });
+});

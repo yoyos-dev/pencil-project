@@ -1,8 +1,14 @@
+import AddDealer from "./AddDealer"
+
 function App() {
   return (
-    <>
-    <p className="text-4xl">Hello World!</p>
-    </>
+      <div className="bg-slate-500 h-screen grid grid-flow-col">
+      
+        <div className="bg-stone-500 w-fit h-screen mx-auto">
+          <AddDealer/>
+        </div>
+
+      </div>
   )
 }
 
