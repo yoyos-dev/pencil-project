@@ -1,13 +1,20 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useState, useEffect } from "react";
 
 const schema = yup.object({
     firstName: yup.string().required("Please Input First Name"),
     lastName: yup.string().required("Please Input Last Name"),
     startTime: yup.string().optional(),
     endTime: yup.string().optional(),
-    
+    games: yup.lazy((value) => 
+    yup.object().shape(
+        Object.keys(value || {}).reduce((shape: Record<string, any>, key) => {
+            shape[key] = yup.boolean();
+            return shape;
+        }, {})
+    )),
 });
 
 interface DealerData {
@@ -15,13 +22,29 @@ interface DealerData {
     lastName: string;
     startTime?: string;
     endTime?: string;
+    games: Record<string, boolean>
 }
 
 const AddDealer = () => {
+    const [games, setGames] = useState<string[]>([]);
+
     const { register, handleSubmit, formState } = useForm( {
         resolver: yupResolver(schema) });
 
     const { errors } = formState;
+
+    useEffect(() => {
+        const handleGamesList = (gamesList: string[]) => {
+            setGames(gamesList);
+        };
+    
+        window.api.request('readGames');
+        window.api.on('gamesList', handleGamesList);
+    
+        return () => {
+            window.api.remove('gamesList', handleGamesList);
+        };
+    }, []);
 
     const handleSave = (dealerData: DealerData) => {
         window.api.send('writeDealer', dealerData);
@@ -61,6 +84,12 @@ const AddDealer = () => {
                     </div>
                 </div>
 
+                {games.map((game, index) => (
+                    <div key={index}>
+                        <input {...register(`games.${game}`)} type="checkbox" id={game} />
+                        <label htmlFor={game}>{game}</label>
+                    </div>
+                ))}
 
                 <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' type="submit">Add Dealer</button>
             </form>
