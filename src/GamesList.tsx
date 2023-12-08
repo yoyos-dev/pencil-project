@@ -36,7 +36,9 @@ const GamesList = () => {
     }
 
     const handleSave = () => {
-        var gamesList = games.filter(Boolean);
+        let gamesList = games.join("\n").split("\n");
+        gamesList = gamesList.filter(Boolean);
+        setGames(gamesList);
         window.api.send('writeGames', gamesList);
     }
 
