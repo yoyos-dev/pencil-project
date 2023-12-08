@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -21,7 +21,7 @@ const AddDealer = () => {
     const { register, handleSubmit, formState } = useForm( {
         resolver: yupResolver(schema) });
 
-    const { errors } = formState
+    const { errors } = formState;
 
     const handleSave = (dealerData: DealerData) => {
         window.api.send('writeDealer', dealerData);

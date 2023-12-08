@@ -40,8 +40,12 @@ function createWindow() {
   }
 
   const dealersFilePath = path.join(app.getPath('userData'), 'dealers.json');
+  const gamesFilePath = path.join(app.getPath('userData'), 'games.json');
   if (!fs.existsSync(dealersFilePath)) {
     fs.writeFileSync(dealersFilePath, JSON.stringify({}));
+  }
+  if (!fs.existsSync(gamesFilePath)) {
+    fs.writeFileSync(gamesFilePath, JSON.stringify({}));
   }
 }
 
@@ -69,6 +73,9 @@ declare global {
   interface Window {
       api: {
           send: (event: string, data: any) => void;
+          on: (channel: string, func: (...args: any[]) => void) => void;
+          request: (channel: string) => void;
+          remove: (channel: string, func: (...args: any[]) => void) => void;
       };
   }
 }
@@ -87,7 +94,7 @@ ipcMain.on('writeDealer', (_event, dealerData) => {
           console.error('Error parsing JSON', e);
         }
       }
-      
+
       let dealerKey = dealerData.lastName + ", " + dealerData.firstName;
       json[dealerKey] = dealerData;
 
@@ -96,6 +103,26 @@ ipcMain.on('writeDealer', (_event, dealerData) => {
             console.error('Error writing file', err);
         }
       });
+    }
+  });
+});
+
+ipcMain.on('writeGames', (_event, gamesList) => {
+  const filePath = path.join(app.getPath('userData'), 'games.json');
+  fs.writeFile(filePath, JSON.stringify(gamesList), (err) => {
+      if (err) {
+          console.error('Error writing file', err);
+      }
+  });
+});
+
+ipcMain.on('readGames', (event) => {
+  const filePath = path.join(app.getPath('userData'), 'games.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } else {
+      event.reply('gamesList', JSON.parse(data));
     }
   });
 });
