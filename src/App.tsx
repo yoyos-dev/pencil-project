@@ -1,5 +1,6 @@
 import AddDealer from "./AddDealer"
 import GamesList from "./GamesList"
+import DealerPool from "./DealerPool"
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       
         <div className="bg-stone-500 w-fit h-screen mx-auto">
           <AddDealer/>
+          <DealerPool/>
         </div>
 
         <div className="bg-stone-500 w-fit h-screen mx-auto">

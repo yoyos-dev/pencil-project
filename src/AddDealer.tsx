@@ -54,6 +54,7 @@ const AddDealer = () => {
 
     const handleSave = (dealerData: DealerData) => {
         window.api.send('writeDealer', dealerData);
+        window.api.send('addDealer', dealerData);
     };
     
     return(

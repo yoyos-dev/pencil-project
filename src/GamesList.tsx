@@ -50,8 +50,18 @@ const GamesList = () => {
             </h1>
 
             <div className='grid gap-y-4 max-w-screen-md'>
-                <textarea ref={textareaRef} rows={4} onChange={handleGames} value={games.join("\n")} className="bg-white p-2 h-fit resize-none w-full" placeholder="Blackjack&#10;Poker&#10;Baccarat&#10;etc..."/>
-                <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' onClick={handleSave}>Save</button>
+                <textarea 
+                    ref={textareaRef} 
+                    rows={4} 
+                    onChange={handleGames} 
+                    value={games.join("\n")} 
+                    className="bg-white p-2 h-fit resize-none w-full"
+                    placeholder="Blackjack&#10;Poker&#10;Baccarat&#10;etc..."/>
+                <button 
+                    className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' 
+                    onClick={handleSave}>
+                        Save
+                </button>
             </div>
        </>
     )

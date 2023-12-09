@@ -80,7 +80,7 @@ declare global {
   }
 }
 
-ipcMain.on('writeDealer', (_event, dealerData) => {
+ipcMain.on('writeDealer', (event, dealerData) => {
   const filePath = path.join(app.getPath('userData'), 'dealers.json');
   fs.readFile(filePath, 'utf-8', (err, data) => {
     if (err) {
@@ -101,19 +101,21 @@ ipcMain.on('writeDealer', (_event, dealerData) => {
       fs.writeFile(filePath, JSON.stringify(json), (err) => {
         if (err) {
             console.error('Error writing file', err);
+        } else {
+          event.reply('dealerAdded');
         }
       });
     }
   });
 });
 
-ipcMain.on('writeGames', (_event, gamesList) => {
+ipcMain.on('writeGames', (event, gamesList) => {
   const filePath = path.join(app.getPath('userData'), 'games.json');
   fs.writeFile(filePath, JSON.stringify(gamesList), (err) => {
       if (err) {
           console.error('Error writing file', err);
       } else {
-        _event.reply('gamesSaved', gamesList);
+        event.reply('gamesSaved', gamesList);
       }
   });
 });
@@ -159,6 +161,17 @@ ipcMain.on('updateDealersGames', (_event, gamesList) => {
           console.error('Error writing file', err);
         }
       });
+    }
+  });
+});
+
+ipcMain.on('readDealers', (event) => {
+  const filePath = path.join(app.getPath('userData'), 'dealers.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } else {
+      event.reply('dealersList', JSON.parse(data));
     }
   });
 });
