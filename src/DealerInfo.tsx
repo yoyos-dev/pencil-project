@@ -96,8 +96,8 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer }) => {
 
                 {games.map((game, index) => (
                     <div key={index}>
-                        <input {...register(`games.${game}`)} type="checkbox" id={game}/>
-                        <label htmlFor={game}>{game}</label>
+                        <input {...register(`games.${game}`)} type="checkbox" id={`dealerInfo.${game}`}/>
+                        <label htmlFor={`dealerInfo.${game}`}>{game}</label>
                     </div>
                 ))}
             </div>

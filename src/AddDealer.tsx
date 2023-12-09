@@ -93,8 +93,8 @@ const AddDealer = () => {
 
                 {games.map((game, index) => (
                     <div key={index}>
-                        <input {...register(`games.${game}`)} type="checkbox" id={game} />
-                        <label htmlFor={game}>{game}</label>
+                        <input {...register(`games.${game}`)} type="checkbox" id={`addDealer.${game}`} />
+                        <label htmlFor={`addDealer.${game}`}>{game}</label>
                     </div>
                 ))}
 
