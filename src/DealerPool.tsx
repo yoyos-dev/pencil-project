@@ -10,7 +10,7 @@ interface DealerPoolProps {
     setSelectedDealer: (dealer: Dealer | null) => void;
   }
 
-  const DealerPool: React.FC<DealerPoolProps> = ({ setSelectedDealer }) => {
+  const DealerPool: React.FC<DealerPoolProps> = ({ selectedDealer, setSelectedDealer }) => {
     const [dealers, setDealers] = useState<Dealers>({});
 
     useEffect(() => {
@@ -42,8 +42,8 @@ interface DealerPoolProps {
                 .map(([_key, value], index) => (
                      <button 
                         key={index} 
-                        onClick={() => setSelectedDealer(value)}
-                        className='bg-slate-200 w-full rounded py-1 px-3 mx-auto focus:bg-yellow-300'>
+                        onClick={() => setSelectedDealer(value === selectedDealer ? null : value)}
+                        className={`bg-slate-200 w-full rounded py-1 px-3 mx-auto ${value === selectedDealer ? 'bg-yellow-300' : ''}`}>
                             {value.firstName + " " + value.lastName}
                     </button>
                 ))}
