@@ -19,15 +19,17 @@ interface DealerPoolProps {
         };
         const handleDealersUpdated = () => {
             window.api.request('readDealers');
-          };
+        };
 
         window.api.request('readDealers');
         window.api.on('dealersList', handleDealersList);
         window.api.on('dealerAdded', handleDealersUpdated);
+        window.api.on('dealerDeleted', handleDealersUpdated);
 
         return () => {
             window.api.remove('dealersList', handleDealersList);
             window.api.remove('dealerAdded', handleDealersUpdated);
+            window.api.remove('dealerDeleted', handleDealersUpdated);
         };
     }, []);
 
@@ -44,7 +46,7 @@ interface DealerPoolProps {
                         key={index} 
                         onClick={() => setSelectedDealer(value === selectedDealer ? null : value)}
                         className={`bg-slate-200 w-full rounded py-1 px-3 mx-auto ${value === selectedDealer ? 'bg-yellow-300' : ''}`}>
-                            {value.firstName + " " + value.lastName}
+                            {value.firstName + " " + value.lastName + " " + value.badgeNum}
                     </button>
                 ))}
             </div>

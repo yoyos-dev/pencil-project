@@ -95,8 +95,7 @@ ipcMain.on('writeDealer', (event, dealerData) => {
         }
       }
 
-      let dealerKey = dealerData.lastName + ", " + dealerData.firstName;
-      json[dealerKey] = dealerData;
+      json[dealerData.badgeNum] = dealerData;
 
       fs.writeFile(filePath, JSON.stringify(json), (err) => {
         if (err) {
@@ -172,6 +171,30 @@ ipcMain.on('readDealers', (event) => {
       console.error('Error reading file', err);
     } else {
       event.reply('dealersList', JSON.parse(data));
+    }
+  });
+});
+
+ipcMain.on('deleteDealer', (event, dealerKey) => {
+  const filePath = path.join(app.getPath('userData'), 'dealers.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } else {
+      let dealers: { [key: string]: any } = {};
+      try {
+        dealers = JSON.parse(data);
+      } catch (e) {
+        console.error('Error parsing JSON', e);
+      }
+      delete dealers[dealerKey];
+      fs.writeFile(filePath, JSON.stringify(dealers), (err) => {
+        if (err) {
+          console.error('Error writing file', err);
+        } else {
+          event.reply('dealerDeleted', JSON.parse(data));
+        }
+      });
     }
   });
 });

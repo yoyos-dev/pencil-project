@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 const schema = yup.object({
     firstName: yup.string().required("Please Input First Name"),
     lastName: yup.string().required("Please Input Last Name"),
+    badgeNum: yup.string().required("Please Input Badge Number"),
     startTime: yup.string().optional(),
     endTime: yup.string().optional(),
     games: yup.lazy((value) => 
@@ -20,6 +21,7 @@ const schema = yup.object({
 interface DealerData {
     firstName: string;
     lastName: string;
+    badgeNum: string;
     startTime?: string;
     endTime?: string;
     games: Record<string, boolean>
@@ -28,7 +30,7 @@ interface DealerData {
 const AddDealer = () => {
     const [games, setGames] = useState<string[]>([]);
 
-    const { register, handleSubmit, formState } = useForm( {
+    const { register, handleSubmit, formState, reset} = useForm( {
         resolver: yupResolver(schema) });
 
     const { errors } = formState;
@@ -55,6 +57,7 @@ const AddDealer = () => {
     const handleSave = (dealerData: DealerData) => {
         window.api.send('writeDealer', dealerData);
         window.api.send('addDealer', dealerData);
+        reset();
     };
     
     return(
@@ -79,6 +82,15 @@ const AddDealer = () => {
                     </div>
                 </div>
 
+                <div>
+                    <span>Badge Number:</span>
+                    <span className="text-red-700">*</span>
+                    
+                    <div className="flex flex-row gap-4">
+                        <input {...register("badgeNum")} placeholder="x######"/>
+                    </div>
+                </div>
+                
                 <div>
                     <div className="grid grid-flow-row grid-cols-2 gap-x-4">
                         <span>Start Time:</span>

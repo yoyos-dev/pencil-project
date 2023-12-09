@@ -7,6 +7,7 @@ import { Dealer } from "./types";
 const schema = yup.object({
     firstName: yup.string().required("Please Input First Name"),
     lastName: yup.string().required("Please Input Last Name"),
+    badgeNum: yup.string().required("Please Input Badge Number"),
     startTime: yup.string().optional(),
     endTime: yup.string().optional(),
     games: yup.lazy((value) => 
@@ -23,7 +24,7 @@ interface DealerInfoProps {
     setSelectedDealer: React.Dispatch<React.SetStateAction<Dealer | null>>;
 }
 
-const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer }) => {
+const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDealer }) => {
     const [games, setGames] = useState<string[]>([]);
 
     const { register, formState, reset } = useForm( {
@@ -60,6 +61,11 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer }) => {
         console.log(selectedDealer);
     }, [selectedDealer, reset]);
 
+    const handleDeleteDealer = () => {
+        window.api.send('deleteDealer', selectedDealer.badgeNum);
+        setSelectedDealer(null);
+      };
+
    return (
         <>
         <h1 className="text-white text-2xl bg-slate-700 text-center p-2">
@@ -79,6 +85,15 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer }) => {
                     <div className="grid grid-flow-row grid-cols-2 gap-x-4">
                         <div className="text-red-700">{String(errors.firstName?.message || '')}</div>
                         <div className="text-red-700">{String(errors.lastName?.message || '')}</div>
+                    </div>
+                </div>
+
+                <div>
+                    <span>Badge Number:</span>
+                    <span className="text-red-700">*</span>
+                    
+                    <div className="flex flex-row gap-4">
+                        <input {...register("badgeNum")} placeholder="x######"/>
                     </div>
                 </div>
 
@@ -103,7 +118,7 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer }) => {
             </div>
         )}
         <div className='grid grid-flow-col justify-center gap-10 m-3'>
-            <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto'>Delete Dealer</button>
+            <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' onClick={handleDeleteDealer}>Delete Dealer</button>
             <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto'>Save Changes</button>
         </div>
         </>
