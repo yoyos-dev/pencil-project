@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
-
-type Dealer = {
-    firstName: string;
-    lastName: string;
-    startTime: string;
-    endTime: string;
-    games?: {
-        [key: string]: boolean;
-    };
-};
+import { Dealer } from "./types";
 
 type Dealers = {
     [key: string]: Dealer;
 };
 
-const DealerPool = () => {
+interface DealerPoolProps {
+    selectedDealer: Dealer | null;
+    setSelectedDealer: (dealer: Dealer | null) => void;
+  }
+
+  const DealerPool: React.FC<DealerPoolProps> = ({ setSelectedDealer }) => {
     const [dealers, setDealers] = useState<Dealers>({});
 
     useEffect(() => {
@@ -46,7 +42,8 @@ const DealerPool = () => {
                 .map(([_key, value], index) => (
                      <button 
                         key={index} 
-                        className='bg-slate-200 w-full rounded py-1 px-3 mx-auto'>
+                        onClick={() => setSelectedDealer(value)}
+                        className='bg-slate-200 w-full rounded py-1 px-3 mx-auto focus:bg-yellow-300'>
                             {value.firstName + " " + value.lastName}
                     </button>
                 ))}
