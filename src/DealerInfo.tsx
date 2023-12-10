@@ -24,10 +24,19 @@ interface DealerInfoProps {
     setSelectedDealer: React.Dispatch<React.SetStateAction<Dealer | null>>;
 }
 
+interface DealerData {
+    firstName: string;
+    lastName: string;
+    badgeNum: string;
+    startTime?: string;
+    endTime?: string;
+    games: Record<string, boolean>
+}
+
 const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDealer }) => {
     const [games, setGames] = useState<string[]>([]);
 
-    const { register, formState, reset } = useForm( {
+    const { register, formState, reset, handleSubmit } = useForm( {
         resolver: yupResolver(schema),
         defaultValues: {
             ...selectedDealer,
@@ -45,11 +54,10 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
         const handleGamesSaved = (gamesList: string[]) => {
             setGames(gamesList);
         };
-    
+
         window.api.request('readGames');
         window.api.on('gamesList', handleGamesList);
         window.api.on('gamesSaved', handleGamesSaved);
-    
         return () => {
             window.api.remove('gamesList', handleGamesList);
             window.api.remove('gamesSaved', handleGamesSaved);
@@ -64,7 +72,11 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
     const handleDeleteDealer = () => {
         window.api.send('deleteDealer', selectedDealer.badgeNum);
         setSelectedDealer(null);
-      };
+    };
+    
+    const handleSave = (dealerData: DealerData) => {
+        window.api.send('updateDealer', { oldBadge: selectedDealer.badgeNum, dealerData: dealerData });
+    }
 
    return (
         <>
@@ -72,7 +84,7 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
             Dealer Info
         </h1>
         {selectedDealer && (
-            <div className='p-3 bg-slate-300 grid gap-y-4 max-w-screen-md'>
+            <form onSubmit={handleSubmit(handleSave)} className='p-3 bg-slate-300 grid gap-y-4 max-w-screen-md'>
                 <div>
                     <span>Name:</span>
                     <span className="text-red-700">*</span>
@@ -115,12 +127,13 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
                         <label htmlFor={`dealerInfo.${game}`}>{game}</label>
                     </div>
                 ))}
-            </div>
+
+                <div className='grid grid-flow-col justify-center gap-10 m-3'>
+                    <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' onClick={handleDeleteDealer}>Delete Dealer</button>
+                    <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' type="submit">Save Changes</button>
+                </div>
+            </form>
         )}
-        <div className='grid grid-flow-col justify-center gap-10 m-3'>
-            <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' onClick={handleDeleteDealer}>Delete Dealer</button>
-            <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto'>Save Changes</button>
-        </div>
         </>
    )
 }

@@ -25,13 +25,20 @@ interface DealerPoolProps {
         window.api.on('dealersList', handleDealersList);
         window.api.on('dealerAdded', handleDealersUpdated);
         window.api.on('dealerDeleted', handleDealersUpdated);
-
+        window.api.on('dealerUpdated', handleDealersUpdated);
         return () => {
             window.api.remove('dealersList', handleDealersList);
             window.api.remove('dealerAdded', handleDealersUpdated);
             window.api.remove('dealerDeleted', handleDealersUpdated);
+            window.api.remove('dealerUpdated', handleDealersUpdated);
         };
     }, []);
+
+    useEffect(() => {
+        if (selectedDealer && dealers[selectedDealer.badgeNum]) {
+            setSelectedDealer(dealers[selectedDealer.badgeNum]);
+        }
+    }, [dealers, selectedDealer, setSelectedDealer]);
 
     return (
         <>

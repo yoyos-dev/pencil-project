@@ -90,8 +90,8 @@ ipcMain.on('writeDealer', (event, dealerData) => {
       if (data) {
         try {
           json = JSON.parse(data);
-        } catch (e) {
-          console.error('Error parsing JSON', e);
+        } catch (err) {
+          console.error('Error parsing JSON', err);
         }
       }
 
@@ -124,8 +124,11 @@ ipcMain.on('readGames', (event) => {
   fs.readFile(filePath, 'utf-8', (err, data) => {
     if (err) {
       console.error('Error reading file', err);
-    } else {
+    } 
+    try {
       event.reply('gamesList', JSON.parse(data));
+    } catch (err) {
+      console.error('Error parsing JSON', err);
     }
   });
 });
@@ -152,8 +155,8 @@ ipcMain.on('updateDealersGames', (_event, gamesList) => {
             }
           }
         }
-      } catch (e) {
-        console.error('Error parsing JSON', e);
+      } catch (err) {
+        console.error('Error parsing JSON', err);
       }
       fs.writeFile(filePath, JSON.stringify(dealers), (err) => {
         if (err) {
@@ -169,8 +172,11 @@ ipcMain.on('readDealers', (event) => {
   fs.readFile(filePath, 'utf-8', (err, data) => {
     if (err) {
       console.error('Error reading file', err);
-    } else {
+    }  
+    try {
       event.reply('dealersList', JSON.parse(data));
+    } catch (err) {
+      console.error('Error parsing JSON', err);
     }
   });
 });
@@ -184,8 +190,8 @@ ipcMain.on('deleteDealer', (event, dealerKey) => {
       let dealers: { [key: string]: any } = {};
       try {
         dealers = JSON.parse(data);
-      } catch (e) {
-        console.error('Error parsing JSON', e);
+      } catch (err) {
+        console.error('Error parsing JSON', err);
       }
       delete dealers[dealerKey];
       fs.writeFile(filePath, JSON.stringify(dealers), (err) => {
@@ -196,5 +202,26 @@ ipcMain.on('deleteDealer', (event, dealerKey) => {
         }
       });
     }
+  });
+});
+
+ipcMain.on('updateDealer', (event, {oldBadge, dealerData}) => {
+  const filePath = path.join(app.getPath('userData'), 'dealers.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+      if (err) {
+          console.error('Error reading file', err);
+      } else {
+          let dealers = JSON.parse(data);
+          delete dealers[oldBadge]
+          dealers[dealerData.badgeNum] = dealerData;
+
+          fs.writeFile(filePath, JSON.stringify(dealers), (err) => {
+              if (err) {
+                  console.error('Error writing file', err);
+              } else {
+                  event.reply('dealerUpdated', dealerData);
+              }
+          });
+      }
   });
 });
