@@ -65,8 +65,10 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
     }, []);
 
     useEffect(() => {
-        reset(selectedDealer);
-        console.log(selectedDealer);
+        reset({
+            ...selectedDealer,
+            games: selectedDealer.games ?? {}
+        });
     }, [selectedDealer, reset]);
 
     const handleDeleteDealer = () => {
