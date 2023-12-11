@@ -61,24 +61,9 @@ const AddDealer = () => {
         reset();
     };
     
-    const toggleContent = () => {
-        const content = document.querySelector('.collapsible-content') as HTMLElement;
-        if (content) {
-            if (content.style.maxHeight) {
-                content.style.maxHeight = '';
-                content.classList.remove('overflow-hidden');
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                content.addEventListener('transitionend', () => {
-                    content.classList.add('overflow-hidden');
-                }, { once: true });
-            }
-        }
-    };
-    
     return(
         <>
-            <h1 onClick={() => {setIsOpen(!isOpen); toggleContent;} } className="text-white text-2xl bg-slate-700 text-center p-2">
+            <h1 onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl bg-slate-700 text-center p-2">
                 Add Dealers
             </h1>
 
