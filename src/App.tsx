@@ -9,7 +9,7 @@ function App() {
   const [selectedDealer, setSelectedDealer] = useState<Dealer | null>(null);
 
   return (
-      <div className="bg-slate-500 h-screen grid grid-flow-col">
+      <div className="bg-slate-500 h-screen flex flex-row place-content-between">
       
         <div className="w-fit h-screen flex flex-col">
           <AddDealer/>
@@ -17,12 +17,12 @@ function App() {
         </div>
 
         {selectedDealer && 
-        <div className="bg-stone-500 w-fit h-screen mx-auto">
+        <div className="w-fit h-screen">
           <DealerInfo selectedDealer={selectedDealer} setSelectedDealer={setSelectedDealer}/>
         </div>
         }
 
-        <div className="bg-stone-500 w-fit h-screen mx-auto">
+        <div className="bg-stone-500 w-fit h-screen">
           <GamesList/>
         </div>
 

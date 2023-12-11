@@ -92,8 +92,8 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
                     <span className="text-red-700">*</span>
                     
                     <div className="flex flex-row gap-4">
-                        <input {...register("firstName")} placeholder="First" />
-                        <input {...register("lastName")} placeholder="Last" />
+                        <input className="w-full" {...register("firstName")} placeholder="First" />
+                        <input className="w-full" {...register("lastName")} placeholder="Last" />
                     </div>
 
                     <div className="grid grid-flow-row grid-cols-2 gap-x-4">
@@ -107,7 +107,7 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
                     <span className="text-red-700">*</span>
                     
                     <div className="flex flex-row gap-4">
-                        <input {...register("badgeNum")} placeholder="x######"/>
+                        <input className="w-full" {...register("badgeNum")} placeholder="x######"/>
                     </div>
                 </div>
 
@@ -123,12 +123,14 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
                     </div>
                 </div>
 
-                {games.map((game, index) => (
-                    <div key={index}>
-                        <input {...register(`games.${game}`)} type="checkbox" id={`dealerInfo.${game}`}/>
-                        <label htmlFor={`dealerInfo.${game}`}>{game}</label>
-                    </div>
-                ))}
+                <div className="grid grid-cols-2 gap-4">
+                    {games.map((game, index) => (
+                        <div key={index}>
+                            <input {...register(`games.${game}`)} type="checkbox" id={`dealerInfo.${game}`}/>
+                            <label htmlFor={`dealerInfo.${game}`}>{game}</label>
+                        </div>
+                    ))}
+                </div>
 
                 <div className='grid grid-flow-col justify-center gap-10 m-3'>
                     <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' onClick={handleDeleteDealer}>Delete Dealer</button>
