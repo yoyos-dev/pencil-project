@@ -11,7 +11,7 @@ function App() {
   return (
       <div className="bg-slate-500 h-screen grid grid-flow-col">
       
-        <div className="bg-stone-500 w-fit h-screen mx-auto">
+        <div className="w-fit h-screen flex flex-col">
           <AddDealer/>
           <DealerPool selectedDealer={selectedDealer} setSelectedDealer={setSelectedDealer}/>
         </div>

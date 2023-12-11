@@ -29,6 +29,7 @@ interface DealerData {
 
 const AddDealer = () => {
     const [games, setGames] = useState<string[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     const { register, handleSubmit, formState, reset} = useForm( {
         resolver: yupResolver(schema) });
@@ -62,11 +63,11 @@ const AddDealer = () => {
     
     return(
         <>
-            <h1 className="text-white text-2xl bg-slate-700 text-center p-2">
+            <h1 onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl bg-slate-700 text-center p-2">
                 Add Dealers
             </h1>
 
-            <form onSubmit={handleSubmit(handleSave)} className="bg-stone-400 p-4 rounded grid gap-y-4 max-w-screen-md">
+            <form onSubmit={handleSubmit(handleSave)} className={`collapsible-content ${isOpen ? 'open' : 'closed'} bg-stone-400 p-4 rounded grid gap-y-4`}>
                 <div>
                     <span>Name:</span>
                     <span className="text-red-700">*</span>
