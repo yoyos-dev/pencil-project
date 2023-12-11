@@ -61,9 +61,24 @@ const AddDealer = () => {
         reset();
     };
     
+    const toggleContent = () => {
+        const content = document.querySelector('.collapsible-content') as HTMLElement;
+        if (content) {
+            if (content.style.maxHeight) {
+                content.style.maxHeight = '';
+                content.classList.remove('overflow-hidden');
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                content.addEventListener('transitionend', () => {
+                    content.classList.add('overflow-hidden');
+                }, { once: true });
+            }
+        }
+    };
+    
     return(
         <>
-            <h1 onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl bg-slate-700 text-center p-2">
+            <h1 onClick={() => {setIsOpen(!isOpen); toggleContent;} } className="text-white text-2xl bg-slate-700 text-center p-2">
                 Add Dealers
             </h1>
 
@@ -73,8 +88,8 @@ const AddDealer = () => {
                     <span className="text-red-700">*</span>
                     
                     <div className="flex flex-row gap-4">
-                        <input {...register("firstName")} placeholder="First" />
-                        <input {...register("lastName")} placeholder="Last" />
+                        <input className="w-full" {...register("firstName")} placeholder="First" />
+                        <input className="w-full" {...register("lastName")} placeholder="Last" />
                     </div>
 
                     <div className="grid grid-flow-row grid-cols-2 gap-x-4">
@@ -88,7 +103,7 @@ const AddDealer = () => {
                     <span className="text-red-700">*</span>
                     
                     <div className="flex flex-row gap-4">
-                        <input {...register("badgeNum")} placeholder="x######"/>
+                        <input className="w-full" {...register("badgeNum")} placeholder="x######"/>
                     </div>
                 </div>
                 
@@ -104,12 +119,14 @@ const AddDealer = () => {
                     </div>
                 </div>
 
-                {games.map((game, index) => (
-                    <div key={index}>
-                        <input {...register(`games.${game}`)} type="checkbox" id={`addDealer.${game}`} />
-                        <label htmlFor={`addDealer.${game}`}>{game}</label>
-                    </div>
-                ))}
+                <div className="grid grid-cols-2 gap-4">
+                    {games.map((game, index) => (
+                        <div key={index}>
+                            <input {...register(`games.${game}`)} type="checkbox" id={`addDealer.${game}`} />
+                            <label htmlFor={`addDealer.${game}`}>{game}</label>
+                        </div>
+                    ))}
+                </div>
 
                 <button className='bg-slate-200 w-fit rounded py-1 px-3 mx-auto' type="submit">Add Dealer</button>
             </form>

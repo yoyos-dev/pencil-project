@@ -5,9 +5,9 @@
 
 @layer components {
     .collapsible-content.closed {
-        @apply transition-all duration-300 ease-in-out max-h-0 pt-0 pb-0 opacity-0 overflow-hidden box-border;
+        @apply transition-all duration-300 ease-in-out max-h-0 opacity-0 pt-0 pb-0;
     }
     .collapsible-content.open {
-        @apply transition-all duration-500 ease-in-out max-h-full 
+        @apply transition-all duration-500 ease-in-out max-h-full;
     }
 }
