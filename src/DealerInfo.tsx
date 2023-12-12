@@ -35,6 +35,7 @@ interface DealerData {
 
 const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDealer }) => {
     const [games, setGames] = useState<string[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     const { register, formState, reset, handleSubmit } = useForm( {
         resolver: yupResolver(schema),
@@ -82,11 +83,11 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
 
    return (
         <>
-        <h1 className="text-white text-2xl bg-slate-700 text-center p-2">
+        <h1 onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl bg-slate-700 text-center p-2">
             Dealer Info
         </h1>
         {selectedDealer && (
-            <form onSubmit={handleSubmit(handleSave)} className='p-3 bg-slate-300 grid gap-y-4 max-w-screen-md'>
+            <form onSubmit={handleSubmit(handleSave)} className={`collapsible-content ${isOpen ? 'open' : 'closed'} bg-slate-300 p-4 rounded grid gap-y-4`}>
                 <div>
                     <span>Name:</span>
                     <span className="text-red-700">*</span>

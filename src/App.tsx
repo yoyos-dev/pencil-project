@@ -9,15 +9,15 @@ function App() {
   const [selectedDealer, setSelectedDealer] = useState<Dealer | null>(null);
 
   return (
-      <div className="bg-slate-500 h-screen flex flex-row place-content-between">
+      <div className="bg-slate-500 h-screen flex flex-row place-content-between items-end">
       
-        <div className="w-fit h-screen flex flex-col">
+        <div className="w-fit h-screen flex flex-col left-0">
           <AddDealer/>
           <DealerPool selectedDealer={selectedDealer} setSelectedDealer={setSelectedDealer}/>
         </div>
 
         {selectedDealer && 
-        <div className="w-fit h-screen">
+        <div className="w-fit h-fit">
           <DealerInfo selectedDealer={selectedDealer} setSelectedDealer={setSelectedDealer}/>
         </div>
         }
