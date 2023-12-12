@@ -87,17 +87,17 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
             Dealer Info
         </h1>
         {selectedDealer && (
-            <form onSubmit={handleSubmit(handleSave)} className={`collapsible-content ${isOpen ? 'open' : 'closed'} bg-slate-300 p-4 rounded grid gap-y-4`}>
+            <form onSubmit={handleSubmit(handleSave)} className={`collapsible-info ${isOpen ? 'open' : 'closed'} bg-slate-300 p-4 rounded grid gap-y-4`}>
                 <div>
                     <span>Name:</span>
                     <span className="text-red-700">*</span>
                     
-                    <div className="flex flex-row gap-4">
+                    <div className="flex flex-row gap-2">
                         <input className="w-full" {...register("firstName")} placeholder="First" />
                         <input className="w-full" {...register("lastName")} placeholder="Last" />
                     </div>
 
-                    <div className="grid grid-flow-row grid-cols-2 gap-x-4">
+                    <div className="grid grid-flow-row grid-cols-2 gap-x-2">
                         <div className="text-red-700">{String(errors.firstName?.message || '')}</div>
                         <div className="text-red-700">{String(errors.lastName?.message || '')}</div>
                     </div>
@@ -107,24 +107,24 @@ const DealerInfo: React.FC<DealerInfoProps> = ({ selectedDealer, setSelectedDeal
                     <span>Badge Number:</span>
                     <span className="text-red-700">*</span>
                     
-                    <div className="flex flex-row gap-4">
+                    <div className="flex flex-row gap-2">
                         <input className="w-full" {...register("badgeNum")} placeholder="x######"/>
                     </div>
                 </div>
 
                 <div>
-                    <div className="grid grid-flow-row grid-cols-2 gap-x-4">
+                    <div className="grid grid-flow-row grid-cols-2 gap-x-2">
                         <span>Start Time:</span>
                         <span>End Time:</span>
                     </div>
                     
-                    <div className="flex flex-row gap-4">
+                    <div className="flex flex-row gap-2">
                         <input className="w-full" type="time" {...register("startTime")}/>
                         <input className="w-full" type="time" {...register("endTime")}/>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-1">
                     {games.map((game, index) => (
                         <div key={index}>
                             <input {...register(`games.${game}`)} type="checkbox" id={`dealerInfo.${game}`}/>
