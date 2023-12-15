@@ -41,11 +41,15 @@ function createWindow() {
 
   const dealersFilePath = path.join(app.getPath('userData'), 'dealers.json');
   const gamesFilePath = path.join(app.getPath('userData'), 'games.json');
+  const tablesFilePath = path.join(app.getPath('userData'), 'tables.json');
   if (!fs.existsSync(dealersFilePath)) {
     fs.writeFileSync(dealersFilePath, JSON.stringify({}));
   }
   if (!fs.existsSync(gamesFilePath)) {
     fs.writeFileSync(gamesFilePath, JSON.stringify({}));
+  }
+  if (!fs.existsSync(tablesFilePath)) {
+    fs.writeFileSync(tablesFilePath, JSON.stringify({}));
   }
 }
 
@@ -225,3 +229,29 @@ ipcMain.on('updateDealer', (event, {oldBadge, dealerData}) => {
       }
   });
 });
+
+ipcMain.on('readTables', (event) => {
+  const filePath = path.join(app.getPath('userData'), 'tables.json');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading file', err);
+    } 
+    try {
+      event.reply('tablesList', JSON.parse(data));
+      console.log(JSON.parse(data))
+    } catch (err) {
+      console.error('Error parsing JSON', err);
+    }
+  });
+});
+
+// ipcMain.on('writeTables', (event, tablesList) => {
+//   const filePath = path.join(app.getPath('userData'), 'tables.json');
+//   fs.writeFile(filePath, JSON.stringify(tablesList), (err) => {
+//       if (err) {
+//           console.error('Error writing file', err);
+//       } else {
+//         event.reply('tablesSaved', tablesList);
+//       }
+//   });
+// });
